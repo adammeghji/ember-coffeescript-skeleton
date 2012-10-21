@@ -1,22 +1,22 @@
 // PhantomJS QUnit Test Runner
 
+/*globals QUnit phantom*/
+
 var args = phantom.args;
 if (args.length < 1 || args.length > 2) {
-  console.log("Usage: " + phantom.scriptName + " <URI> <timeout>");
+  console.log("Usage: " + phantom.scriptName + " <URL> <timeout>");
   phantom.exit(1);
 }
 
 var page = require('webpage').create();
 
-var warnRe = /^WARNING:/;
 page.onConsoleMessage = function(msg) {
-  if (!warnRe.test(msg)) console.log(msg);
+  console.log(msg);
 };
 
-var uri = args[0];
-page.open(uri, function(status) {
+page.open(args[0], function(status) {
   if (status !== 'success') {
-    console.error("Unable to access: " + uri + " [" + status + "]");
+    console.error("Unable to access network");
     phantom.exit(1);
   } else {
     page.evaluate(addLogging);
@@ -82,6 +82,7 @@ function addLogging() {
 
   QUnit.done(function(context) {
     var stats = [
+      "Test run: " + JSON.stringify(QUnit.urlParams),
       "Time: " + context.runtime + "ms",
       "Total: " + context.total,
       "Passed: " + context.passed,
