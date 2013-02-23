@@ -9,7 +9,7 @@ require 'bundler/setup'
 ENV['RACK_ENV'] ||= 'development'
 Bundler.require :default, ENV['RACK_ENV']
 
-use Rake::Pipeline::Middleware, 'Assetfile'
+use Rake::Pipeline::Middleware, Rake::Pipeline::Project.new('Assetfile')
 
 use Rack::Reloader, 1
 
